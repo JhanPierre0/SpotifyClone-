@@ -1,4 +1,4 @@
-# 🎵 Spotify Clone (Deezer API)
+# Spotify Clone (Deezer API)
 
 A full-stack Spotify-inspired music streaming interface built using the [Deezer API](https://developers.deezer.com/api). This project is intended for educational and non-commercial use only.
 
@@ -10,7 +10,7 @@ A full-stack Spotify-inspired music streaming interface built using the [Deezer 
 - Search music using Deezer’s public API
 - Play 30-second track previews
 - Responsive design
-- Built with [Your stack: e.g. React + Tailwind + Node.js]
+- Built with [React + Tailwind + Node.js]
 
 ---
 
