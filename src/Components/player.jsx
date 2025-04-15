@@ -1,5 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { PlayerContext } from "../context/PlayerContext";
+import { PlaylistContext } from "../context/PlaylistContext";
 import { assets } from "../assets/assets";
 
 const Player = () => {
@@ -25,6 +26,9 @@ const Player = () => {
         toggleShuffle
     } = useContext(PlayerContext);
 
+    const { playlists, addSongToPlaylist } = useContext(PlaylistContext);
+    const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+
     useEffect(() => {
         if (audioRef.current) {
             audioRef.current.onended = () => {
@@ -32,6 +36,19 @@ const Player = () => {
             };
         }
     }, [audioRef.current]);
+
+    const handleAddToPlaylist = () => {
+        if (!selectedPlaylist || !track.id) return;
+        
+        const song = {
+            id: track.id,
+            name: track.name,
+            desc: track.desc,
+            image: track.image,
+            preview: track.preview
+        };
+        addSongToPlaylist(selectedPlaylist, song);
+    };
 
     return (
         <div className="h-[10vh] bg-black flex justify-between items-center text-white px-4">
@@ -112,7 +129,31 @@ const Player = () => {
                 </div>
             </div>
 
-            <div className="hidden md:flex items-center gap-4">
+            <div className="flex items-center gap-4">
+                {playlists.length > 0 && track.id && (
+                    <div className="flex items-center gap-2">
+                        <select
+                            value={selectedPlaylist || ""}
+                            onChange={(e) => setSelectedPlaylist(parseInt(e.target.value))}
+                            className="px-3 py-1 bg-gray-700 text-white rounded-full text-sm"
+                        >
+                            <option value="">Add to playlist</option>
+                            {playlists.map(playlist => (
+                                <option key={playlist.id} value={playlist.id}>
+                                    {playlist.name}
+                                </option>
+                            ))}
+                        </select>
+                        {selectedPlaylist && (
+                            <button
+                                onClick={handleAddToPlaylist}
+                                className="px-3 py-1 bg-green-500 text-black rounded-full text-sm"
+                            >
+                                Add
+                            </button>
+                        )}
+                    </div>
+                )}
                 <div className="flex items-center gap-2">
                     {isMuted ? (
                         <img

@@ -7,7 +7,7 @@ import { assets } from "../assets/assets";
 
 const DisplayAlbum = () => {
     const { id } = useParams();
-    const { playWithId } = useContext(PlayerContext);
+    const { playWithId, setAlbum } = useContext(PlayerContext);
     const [albumData, setAlbumData] = useState(null);
     const [tracks, setTracks] = useState([]);
 
@@ -32,6 +32,19 @@ const DisplayAlbum = () => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
         return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    };
+
+    const handleTrackClick = async (track) => {
+        setAlbum({
+            ...albumData,
+            tracks: tracks
+        });
+        await playWithId(track.id, {
+            name: track.title,
+            desc: track.artist.name,
+            image: albumData.cover_medium,
+            preview: track.preview
+        });
     };
 
     return(
@@ -61,7 +74,7 @@ const DisplayAlbum = () => {
             <hr />
             {tracks.map((track, index) => (
                 <div
-                onClick={() => playWithId(track.id)} 
+                onClick={() => handleTrackClick(track)} 
                 key={index} 
                 className="grid grid-cols-3 sm:grid-cols-4 gap-2 p-2 items-center text-[#a7a7a7] hover:bg-[#ffffff2b] cursor-pointer"
                 >

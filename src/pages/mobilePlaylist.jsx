@@ -1,11 +1,15 @@
+import Player from "../Components/player";
 import React, { useState, useContext } from 'react';
 import { assets } from '../assets/assets.js'
 import '../App.css'
 import { useNavigate } from 'react-router-dom';
 import { PlaylistContext } from '../context/PlaylistContext';
 import { PlayerContext } from '../context/PlayerContext';
+import Navbar from "../Components/nav-var.jsx";
+import Search from "../Components/Search.jsx";
 
-const Sidebar = () => {
+const MbPlaylist = () => {
+
     const navigate = useNavigate();
     const { playlists, createPlaylist, deletePlaylist } = useContext(PlaylistContext);
     const { playWithId } = useContext(PlayerContext);
@@ -24,14 +28,14 @@ const Sidebar = () => {
         navigate(`/main/playlist/${playlist.id}`);
     };
 
+
     return(
-        <div id='playlists' className='w-[25%] h-full p-2 flex-col gap-2 text-white hidden lg:flex sm:flex'>
-            <div className='bg-[#121212] h-[15%] rounded flex flex-col justify-around'>
-                <div onClick={()=>navigate("/main")} className='flex items-center gap-3 pl-8 cursor-pointer'>
-                    <img className='w-6' src={assets.home_icon} alt="" />
-                    <p className='font-bold'>Home</p>
-                </div>
-            </div>
+        <>
+        <div className="bg-[#121212]">
+        <Search/>
+        <Navbar/>
+        </div>
+    <div className='bg-[#121212] w-full h-screen p-2 flex-col gap-2 text-white lg:flex sm:flex'>
             <div className='bg-[#121212] h-[85%] rounded'>
                 <div className='p-4 flex items-center justify-between'>
                     <div className='flex items-center gap-3'>
@@ -108,7 +112,9 @@ const Sidebar = () => {
                 )}
             </div>
         </div>
+        <Player></Player>
+        </>
     )
 }
 
-export default Sidebar
+export default MbPlaylist

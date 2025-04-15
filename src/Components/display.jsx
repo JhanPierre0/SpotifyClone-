@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import DisplayHome from "./display-home";
 import { Route, Routes } from "react-router-dom";
 import DisplayAlbum from "./displayAlbum";
+import DisplayPlaylist from "./DisplayPlaylist";
 import { deezerService } from "../services/deezerService";
 import { PlayerContext } from "../context/PlayerContext";
 
@@ -123,6 +124,7 @@ const Display = () => {
                 <Routes>
                     <Route path='/' element={<DisplayHome/>}/>
                     <Route path='/:id' element={<DisplayAlbum/>}/>
+                    <Route path='/playlist/:id' element={<DisplayPlaylist/>}/>
                 </Routes>
             )}
         </div>

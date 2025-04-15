@@ -1,34 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { deezerService } from '../services/deezerService';
-import { PlayerContext } from '../context/PlayerContext';
-import { useContext } from 'react';
+import React, { useState, useEffect, useContext } from "react";
+import { deezerService } from "../services/deezerService";
+import { PlayerContext } from "../context/PlayerContext";
+import { PlaylistContext } from "../context/PlaylistContext";
 
 const Search = () => {
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState("");
     const [results, setResults] = useState({ tracks: [], artists: [] });
     const [isLoading, setIsLoading] = useState(false);
     const { playWithId } = useContext(PlayerContext);
+    const { playlists, addSongToPlaylist } = useContext(PlaylistContext);
+    const [selectedPlaylist, setSelectedPlaylist] = useState(null);
 
     useEffect(() => {
         const searchTimeout = setTimeout(async () => {
-            if (query.trim() === '') {
+            if (query.trim()) {
+                setIsLoading(true);
+                try {
+                    const searchResults = await deezerService.search(query);
+                    setResults(searchResults);
+                } catch (error) {
+                    console.error("Search error:", error);
+                } finally {
+                    setIsLoading(false);
+                }
+            } else {
                 setResults({ tracks: [], artists: [] });
-                return;
-            }
-
-            setIsLoading(true);
-            try {
-                const searchResults = await deezerService.search(query);
-                setResults(searchResults);
-            } catch (error) {
-                console.error('Error searching:', error);
-            } finally {
-                setIsLoading(false);
             }
         }, 500);
 
         return () => clearTimeout(searchTimeout);
     }, [query]);
+
+    const handleAddToPlaylist = (track) => {
+        if (!selectedPlaylist) return;
+        
+        const song = {
+            id: track.id,
+            name: track.title,
+            desc: track.artist.name,
+            image: track.album.cover_medium,
+            preview: track.preview
+        };
+        addSongToPlaylist(selectedPlaylist, song);
+    };
 
     return (
         <div className="w-full p-4">
@@ -68,7 +82,6 @@ const Search = () => {
                                 {results.tracks.map((track) => (
                                     <div
                                         key={track.id}
-                                        onClick={() => playWithId(track.id)}
                                         className="flex items-center gap-4 p-2 hover:bg-gray-800 rounded-lg cursor-pointer"
                                     >
                                         <img
@@ -76,9 +89,39 @@ const Search = () => {
                                             alt={track.title}
                                             className="w-12 h-12 rounded"
                                         />
-                                        <div>
+                                        <div className="flex-1">
                                             <p className="font-medium">{track.title}</p>
                                             <p className="text-sm text-gray-400">{track.artist.name}</p>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => playWithId(track.id)}
+                                                className="px-3 py-1 bg-green-500 text-black rounded-full text-sm"
+                                            >
+                                                Play
+                                            </button>
+                                            {playlists.length > 0 && (
+                                                <select
+                                                    value={selectedPlaylist || ""}
+                                                    onChange={(e) => setSelectedPlaylist(parseInt(e.target.value))}
+                                                    className="px-3 py-1 bg-gray-700 text-white rounded-full text-sm"
+                                                >
+                                                    <option value="">Add to playlist</option>
+                                                    {playlists.map(playlist => (
+                                                        <option key={playlist.id} value={playlist.id}>
+                                                            {playlist.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            )}
+                                            {selectedPlaylist && (
+                                                <button
+                                                    onClick={() => handleAddToPlaylist(track)}
+                                                    className="px-3 py-1 bg-green-500 text-black rounded-full text-sm"
+                                                >
+                                                    Add
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 ))}
@@ -89,18 +132,18 @@ const Search = () => {
                     {results.artists.length > 0 && (
                         <div>
                             <h2 className="text-xl font-bold mb-2">Artists</h2>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                 {results.artists.map((artist) => (
                                     <div
                                         key={artist.id}
-                                        className="flex flex-col items-center p-2 hover:bg-gray-800 rounded-lg cursor-pointer"
+                                        className="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition-colors cursor-pointer"
                                     >
                                         <img
                                             src={artist.picture_medium}
                                             alt={artist.name}
-                                            className="w-24 h-24 rounded-full mb-2"
+                                            className="w-full aspect-square object-cover rounded-full mb-2"
                                         />
-                                        <p className="text-center font-medium">{artist.name}</p>
+                                        <h3 className="font-semibold text-center">{artist.name}</h3>
                                     </div>
                                 ))}
                             </div>
