@@ -104,7 +104,7 @@ const Search = () => {
                                                 <select
                                                     value={selectedPlaylist || ""}
                                                     onChange={(e) => setSelectedPlaylist(parseInt(e.target.value))}
-                                                    className="px-3 py-1 bg-gray-700 text-white rounded-full text-sm"
+                                                    className="w-20 py-1 bg-gray-700 text-white rounded-full text-xs"
                                                 >
                                                     <option value="">Add to playlist</option>
                                                     {playlists.map(playlist => (
@@ -117,7 +117,7 @@ const Search = () => {
                                             {selectedPlaylist && (
                                                 <button
                                                     onClick={() => handleAddToPlaylist(track)}
-                                                    className="px-3 py-1 bg-green-500 text-black rounded-full text-sm"
+                                                    className="px-3 py-1 bg-green-500 text-black rounded-full text-xs"
                                                 >
                                                     Add
                                                 </button>

@@ -129,9 +129,9 @@ const Player = () => {
                 </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-4">
                 {playlists.length > 0 && track.id && (
-                    <div className="flex items-center gap-2">
+                    <div className="flex lg:flex items-center gap-2">
                         <select
                             value={selectedPlaylist || ""}
                             onChange={(e) => setSelectedPlaylist(parseInt(e.target.value))}

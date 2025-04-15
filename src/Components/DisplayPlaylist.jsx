@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { PlaylistContext } from '../context/PlaylistContext';
 import { PlayerContext } from '../context/PlayerContext';
 import { deezerService } from '../services/deezerService';
+import Navbar from './nav-var';
 
 const DisplayPlaylist = () => {
     const { id } = useParams();
@@ -54,6 +55,7 @@ const DisplayPlaylist = () => {
 
     return (
         <div className="text-white p-4">
+            <Navbar />
             <div className="mb-6">
                 <h1 className="text-3xl font-bold mb-2">{playlist.name}</h1>
                 <p className="text-gray-400">{playlist.songs.length} songs {playlist.songs.length * 30} S Duration</p>
