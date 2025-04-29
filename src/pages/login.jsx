@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../data/supabase";
 import logo from '../assets/spotify-white-logo.png' 
+import OneTapComponent from "../Components/google";
 
 const login = () => {
   const navigate = useNavigate();
@@ -49,8 +50,10 @@ const login = () => {
         <section className="bg-neutral-900 w-auto px-17 rounded-lg text-white flex justify-center items-center flex-col mt-8 h-screen">
         <img src={logo} alt="Spotify logo" className="h-10 w-10"/>
         <h1 className="text-[30px] font-bold">Log in to spotify</h1>
-
-        <form onSubmit={handleSubmit} className="flex flex-col items-center mt-10">
+        <div className="mt-10">
+          <OneTapComponent/>
+        </div>
+        <form onSubmit={handleSubmit} className="flex flex-col items-center">
             <span className="flex flex-col justify-center">
             <label htmlFor="Email" className="font-bold text-sm">Email</label>
             <input id="Email"  className="mt-2 border-neutral-400 border-1 rounded-sm w-72 h-11 hover:border-white p-2 border-solid" onChange={getEmail} type="email" value={email} placeholder="Email" /> <br />
@@ -59,7 +62,7 @@ const login = () => {
             <label htmlFor="Password" className="font-bold text-sm">Password</label>
             <input id="Password" className="mt-2 border-neutral-400 border-1 rounded-sm w-72 h-11 hover:border-white p-2 border-solid" onChange={getPassword} type="password" value={password} placeholder="Password"/><br />
             </span>
-            <button className="mt-2 border-2 border-green-500 rounded-full px-22 py-2 text-black font-bold bg-green-500 hover:pt-3 hover:px-23 hover:border-green-400 hover:bg-green-400" type="submit">Iniciar Sesion</button>
+            <button className="mt-2 border-2 border-green-500 rounded-full px-22 py-2 text-black font-bold bg-green-500 hover:pt-3 hover:px-23 hover:border-green-400 hover:bg-green-400" type="submit">Log in</button>
         </form>
         <br /> <br />
         <span className="text-neutral-400 font-medium">Don't have an account?<Link to="/register" className="text-white decoration-2 underline">Sign up for Spotify</Link></span>

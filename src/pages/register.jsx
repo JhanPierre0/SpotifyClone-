@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../data/supabase";
 import logo from '../assets/spotify-white-logo.png' 
+import OneTapComponent from "../Components/google";
 
 const register = () => {
   const navigate = useNavigate();
@@ -59,7 +60,10 @@ const register = () => {
         </header>
         <h1 className="text-4xl font-bold text-center mb-8">Sign up to start listening</h1>
 
-        <form onSubmit={handleSignup} className="flex flex-col">
+        <div>
+          <OneTapComponent/>
+        </div>
+        <form onSubmit={handleSignup} className="flex flex-col">          
           <div>
             <label htmlFor="email" className="text-sm font-semibold mb-1 block">
               Email
